@@ -3,68 +3,68 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 1. solve(member_of, red)
    => []
 2. specialise(len, [-2,green,green,blue,6])
-   => []
+   => [atom-[1]]
 3. run_jit(member_of, [], red)
    => []
 4. matching(member_of, red)
    => []
-5. deterministic_shapes([])
-   => []
+5. deterministic_shapes([atom-[1]])
+   => [atom]
 6. solve(len, blue)
    => []
 7. specialise(colour, [f(x)])
-   => []
-8. run_jit(len, [], f(x))
+   => [compound-[1,2,3]]
+8. run_jit(len, [atom-[1]], f(x))
    => []
 9. matching(classify, red)
    => [3]
-10. deterministic_shapes([nil-[1]])
+10. deterministic_shapes([compound-[1,2],nil-[1]])
    => [nil]
 11. solve(classify, -4)
    => [negative]
 12. specialise(colour, [blue,[],4,green])
-   => [atom-[2,3]]
-13. run_jit(classify, [atom-[3],cons-[4]], [2,a])
+   => [atom-[1,2,3],int-[3],nil-[3]]
+13. run_jit(classify, [atom-[1,2,3],compound-[1,2,3,4],cons-[1,2,3,4],nil-[1,2,3]], [2,a])
    => [list]
 14. matching(member_of, [a,2,a])
    => [1,2]
-15. deterministic_shapes([atom-[3]])
-   => [atom]
+15. deterministic_shapes([atom-[1,2,3]])
+   => []
 16. solve(len, f(x))
    => []
 17. specialise(colour, [green,red])
-   => [atom-[1,3]]
+   => [atom-[1,2,3]]
 18. run_jit(member_of, [], [])
    => []
 19. matching(colour, green)
    => [3]
-20. deterministic_shapes([atom-[3]])
-   => [atom]
+20. deterministic_shapes([atom-[1,2,3],compound-[1,2,3,4],nil-[1,2,3]])
+   => []
 21. solve(colour, red)
    => [warm,other]
 22. specialise(colour, [f(x),f(x),f(x),f(x)])
-   => []
-23. run_jit(classify, [], f(x))
+   => [compound-[1,2,3]]
+23. run_jit(classify, [nil-[1,2,3]], f(x))
    => []
 24. matching(classify, green)
    => [3]
-25. deterministic_shapes([atom-[1,3]])
-   => []
+25. deterministic_shapes([atom-[1,2,3],cons-[3],nil-[3]])
+   => [cons,nil]
 26. solve(colour, f(x))
    => []
 27. specialise(colour, [[a]])
-   => []
-28. run_jit(colour, [atom-[2,3]], green)
+   => [cons-[3]]
+28. run_jit(colour, [atom-[1,2,3],int-[3]], green)
    => [other]
 29. matching(len, -3)
    => []
-30. deterministic_shapes([])
+30. deterministic_shapes([compound-[1,2,3,4]])
    => []
 31. solve(colour, green)
    => [other]
 32. specialise(member_of, [f(x)])
-   => []
-33. run_jit(colour, [atom-[2,3]], green)
+   => [compound-[1,2]]
+33. run_jit(colour, [atom-[1,2,3],int-[3]], green)
    => [other]
 34. matching(len, -5)
    => []
@@ -73,38 +73,38 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 36. solve(colour, 6)
    => []
 37. specialise(colour, [red,blue,[a,2],blue])
-   => [atom-[1,2,3]]
-38. run_jit(colour, [], f(x))
+   => [atom-[1,2,3],cons-[3]]
+38. run_jit(colour, [cons-[3],nil-[3]], f(x))
    => []
 39. matching(member_of, f(x))
    => []
-40. deterministic_shapes([cons-[2],nil-[1]])
-   => [cons,nil]
+40. deterministic_shapes([atom-[1],compound-[1,2],cons-[2],nil-[1]])
+   => [atom,cons,nil]
 41. solve(member_of, blue)
    => []
 42. specialise(colour, [green,[],red])
-   => [atom-[1,3]]
-43. run_jit(classify, [], red)
+   => [atom-[1,2,3],nil-[3]]
+43. run_jit(classify, [compound-[1,2,3,4]], red)
    => [name]
 44. matching(len, f(x))
    => []
-45. deterministic_shapes([atom-[1,2,3]])
-   => []
+45. deterministic_shapes([atom-[1,2,3],nil-[3]])
+   => [nil]
 46. solve(classify, blue)
    => [name]
 47. specialise(classify, [green,-3,[2,a,1,b],[1,1],4])
-   => [atom-[3],cons-[4],int-[1,2]]
+   => [atom-[1,2,3],cons-[1,2,3,4],int-[1,2,3]]
 48. run_jit(member_of, [], f(x))
    => []
 49. matching(len, red)
    => []
-50. deterministic_shapes([atom-[1,2,3]])
-   => []
+50. deterministic_shapes([atom-[1,2,3],cons-[3],int-[3]])
+   => [cons,int]
 51. solve(len, blue)
    => []
 52. specialise(colour, [8])
-   => []
-53. run_jit(colour, [atom-[1,3]], green)
+   => [int-[3]]
+53. run_jit(colour, [atom-[1,2,3]], green)
    => [other]
 54. matching(classify, [])
    => []
@@ -113,8 +113,8 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 56. solve(colour, [2])
    => []
 57. specialise(len, [1,[],blue,green])
-   => [nil-[1]]
-58. run_jit(classify, [cons-[4],int-[1]], f(x))
+   => [atom-[1],nil-[1]]
+58. run_jit(classify, [cons-[1,2,3,4],int-[1,2,3]], f(x))
    => []
 59. matching(colour, [])
    => []
@@ -124,17 +124,17 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
    => [cool,other]
 62. specialise(member_of, [6,red,red])
    => []
-63. run_jit(colour, [], [])
+63. run_jit(colour, [compound-[1,2,3],cons-[3],int-[3],nil-[3]], [])
    => []
 64. matching(member_of, blue)
    => []
-65. deterministic_shapes([cons-[2]])
+65. deterministic_shapes([compound-[1,2],cons-[2]])
    => [cons]
 66. solve(member_of, f(x))
    => []
 67. specialise(len, [red])
-   => []
-68. run_jit(classify, [atom-[3],cons-[4]], [])
+   => [atom-[1]]
+68. run_jit(classify, [atom-[1,2,3],compound-[1,2,3,4],cons-[1,2,3,4]], [])
    => []
 69. matching(classify, red)
    => [3]
@@ -143,28 +143,28 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 71. solve(classify, green)
    => [name]
 72. specialise(classify, [f(x),[2,a],9,[],1])
-   => [cons-[4],int-[2]]
-73. run_jit(len, [nil-[1]], [a,b,1,1])
+   => [compound-[1,2,3,4],cons-[1,2,3,4],int-[1,2,3],nil-[1,2,3]]
+73. run_jit(len, [atom-[1],nil-[1]], [a,b,1,1])
    => [4]
 74. matching(member_of, green)
    => []
-75. deterministic_shapes([atom-[3]])
-   => [atom]
+75. deterministic_shapes([atom-[1,2,3],cons-[3],nil-[3]])
+   => [cons,nil]
 76. solve(len, red)
    => []
 77. specialise(member_of, [[a,a,a],f(x),f(x),red,[]])
-   => [cons-[1,2]]
-78. run_jit(member_of, [cons-[1]], [1,a,1,a])
-   => [1]
+   => [compound-[1,2],cons-[1,2]]
+78. run_jit(member_of, [cons-[1,2]], [1,a,1,a])
+   => [1,a,1,a]
 79. matching(len, 7)
    => []
-80. deterministic_shapes([atom-[1,3]])
+80. deterministic_shapes([atom-[1,2,3],compound-[1,2,3]])
    => []
 81. solve(len, -3)
    => []
 82. specialise(member_of, [red,blue,7,blue,[2,2,a,2]])
    => [cons-[1,2]]
-83. run_jit(len, [nil-[1]], blue)
+83. run_jit(len, [atom-[1],compound-[1,2],nil-[1]], blue)
    => []
 84. matching(colour, red)
    => [1,3]
@@ -174,16 +174,16 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
    => []
 87. specialise(member_of, [green])
    => []
-88. run_jit(len, [], green)
+88. run_jit(len, [atom-[1]], green)
    => []
 89. matching(len, [a,2,1])
    => [2]
-90. deterministic_shapes([atom-[3],cons-[4]])
-   => [atom,cons]
+90. deterministic_shapes([atom-[1,2,3],compound-[1,2,3,4],cons-[1,2,3,4],nil-[1,2,3]])
+   => []
 91. solve(colour, f(x))
    => []
 92. specialise(colour, [green])
-   => [atom-[3]]
+   => [atom-[1,2,3]]
 93. run_jit(member_of, [], [])
    => []
 94. matching(len, -3)
@@ -193,8 +193,8 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 96. solve(classify, blue)
    => [name]
 97. specialise(len, [[],blue,3,blue])
-   => [nil-[1]]
-98. run_jit(colour, [atom-[3]], [])
+   => [atom-[1],nil-[1]]
+98. run_jit(colour, [atom-[1,2,3],int-[3],nil-[3]], [])
    => []
 99. matching(len, green)
    => []
@@ -203,58 +203,58 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 101. solve(len, red)
    => []
 102. specialise(member_of, [blue,[],[2]])
-   => [cons-[1]]
-103. run_jit(colour, [atom-[1,3]], blue)
-   => [other]
+   => [cons-[1,2]]
+103. run_jit(colour, [atom-[1,2,3],nil-[3]], blue)
+   => [cool,other]
 104. matching(member_of, 9)
    => []
-105. deterministic_shapes([atom-[2,3]])
-   => []
+105. deterministic_shapes([atom-[1,2,3],cons-[3],int-[3]])
+   => [cons,int]
 106. solve(len, red)
    => []
 107. specialise(colour, [-1])
-   => []
-108. run_jit(len, [nil-[1]], green)
+   => [int-[3]]
+108. run_jit(len, [atom-[1],compound-[1,2],nil-[1]], green)
    => []
 109. matching(colour, [])
    => []
-110. deterministic_shapes([atom-[3]])
-   => [atom]
+110. deterministic_shapes([atom-[1,2,3],compound-[1,2,3,4],nil-[1,2,3]])
+   => []
 111. solve(colour, green)
    => [other]
 112. specialise(classify, [green,blue])
-   => [atom-[3]]
-113. run_jit(colour, [atom-[3]], red)
-   => [other]
+   => [atom-[1,2,3]]
+113. run_jit(colour, [atom-[1,2,3],compound-[1,2,3],cons-[3],int-[3]], red)
+   => [warm,other]
 114. matching(member_of, f(x))
    => []
-115. deterministic_shapes([])
+115. deterministic_shapes([compound-[1,2]])
    => []
 116. solve(member_of, [b,b,1,a])
    => [b,b,1,a]
 117. specialise(colour, [[a],green,6])
-   => [atom-[3]]
-118. run_jit(classify, [atom-[3],cons-[4]], green)
+   => [atom-[1,2,3],cons-[3],int-[3]]
+118. run_jit(classify, [atom-[1,2,3],cons-[1,2,3,4]], green)
    => [name]
 119. matching(member_of, f(x))
    => []
-120. deterministic_shapes([atom-[2,3]])
+120. deterministic_shapes([atom-[1,2,3],compound-[1,2,3]])
    => []
 121. solve(len, [a])
    => [1]
 122. specialise(len, [green])
-   => []
+   => [atom-[1]]
 123. run_jit(member_of, [], 5)
    => []
 124. matching(member_of, [])
    => []
-125. deterministic_shapes([atom-[2,3]])
-   => []
+125. deterministic_shapes([atom-[1,2,3],cons-[3],nil-[3]])
+   => [cons,nil]
 126. solve(member_of, green)
    => []
 127. specialise(colour, [[b,1,1,1],blue])
-   => [atom-[2,3]]
-128. run_jit(colour, [], blue)
+   => [atom-[1,2,3],cons-[3]]
+128. run_jit(colour, [cons-[3]], blue)
    => [cool,other]
 129. matching(len, green)
    => []
@@ -263,58 +263,58 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 131. solve(classify, red)
    => [name]
 132. specialise(len, [[],f(x)])
-   => [nil-[1]]
-133. run_jit(len, [], blue)
+   => [compound-[1,2],nil-[1]]
+133. run_jit(len, [atom-[1]], blue)
    => []
 134. matching(member_of, [])
    => []
-135. deterministic_shapes([cons-[1,2]])
+135. deterministic_shapes([compound-[1,2],cons-[1,2]])
    => []
 136. solve(member_of, f(x))
    => []
 137. specialise(classify, [blue,[]])
-   => [atom-[3]]
-138. run_jit(classify, [atom-[3]], f(x))
+   => [atom-[1,2,3],nil-[1,2,3]]
+138. run_jit(classify, [atom-[1,2,3],nil-[1,2,3]], f(x))
    => []
 139. matching(classify, 2)
    => [2]
-140. deterministic_shapes([atom-[1,3]])
-   => []
+140. deterministic_shapes([atom-[1,2,3],compound-[1,2,3],nil-[3]])
+   => [nil]
 141. solve(colour, [2])
    => []
 142. specialise(member_of, [red,f(x),blue])
-   => []
-143. run_jit(colour, [atom-[1,2,3]], [b,1,2,b])
+   => [compound-[1,2]]
+143. run_jit(colour, [atom-[1,2,3],nil-[3]], [b,1,2,b])
    => []
 144. matching(len, red)
    => []
-145. deterministic_shapes([cons-[2]])
-   => [cons]
+145. deterministic_shapes([atom-[1],compound-[1,2],cons-[2]])
+   => [atom,cons]
 146. solve(classify, [b,2,2,2])
    => [list]
 147. specialise(member_of, [green,green])
    => []
-148. run_jit(colour, [], [])
-   => []
+148. run_jit(colour, [compound-[1,2,3],cons-[3],int-[3]], [])
+   => [other]
 149. matching(colour, blue)
    => [2,3]
-150. deterministic_shapes([atom-[1,2,3]])
+150. deterministic_shapes([atom-[1,2,3],compound-[1,2,3]])
    => []
 151. solve(member_of, blue)
    => []
 152. specialise(member_of, [red,[],red,red])
    => []
-153. run_jit(colour, [], green)
+153. run_jit(colour, [compound-[1,2,3],int-[3]], green)
    => [other]
 154. matching(colour, green)
    => [3]
-155. deterministic_shapes([])
-   => []
+155. deterministic_shapes([int-[3],nil-[3]])
+   => [int,nil]
 156. solve(classify, red)
    => [name]
 157. specialise(classify, [f(x)])
-   => []
-158. run_jit(len, [], [2,2])
+   => [compound-[1,2,3,4]]
+158. run_jit(len, [atom-[1]], [2,2])
    => [2]
 159. matching(len, green)
    => []
@@ -324,7 +324,7 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
    => []
 162. specialise(len, [5])
    => []
-163. run_jit(classify, [atom-[3]], green)
+163. run_jit(classify, [atom-[1,2,3],nil-[1,2,3]], green)
    => [name]
 164. matching(len, green)
    => []
@@ -333,8 +333,8 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 166. solve(classify, blue)
    => [name]
 167. specialise(len, [blue,green])
-   => []
-168. run_jit(len, [nil-[1]], red)
+   => [atom-[1]]
+168. run_jit(len, [atom-[1],nil-[1]], red)
    => []
 169. matching(member_of, red)
    => []
@@ -343,18 +343,18 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 171. solve(member_of, [])
    => []
 172. specialise(len, [blue])
-   => []
+   => [atom-[1]]
 173. run_jit(len, [nil-[1]], green)
    => []
 174. matching(member_of, [a,2,b])
    => [1,2]
-175. deterministic_shapes([atom-[1,3]])
-   => []
+175. deterministic_shapes([atom-[1,2,3],compound-[1,2,3],nil-[3]])
+   => [nil]
 176. solve(len, green)
    => []
 177. specialise(colour, [green])
-   => [atom-[3]]
-178. run_jit(classify, [atom-[3]], blue)
+   => [atom-[1,2,3]]
+178. run_jit(classify, [atom-[1,2,3],nil-[1,2,3]], blue)
    => [name]
 179. matching(member_of, blue)
    => []
@@ -363,28 +363,28 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 181. solve(classify, 8)
    => [natural]
 182. specialise(classify, [green])
-   => [atom-[3]]
-183. run_jit(len, [nil-[1]], [])
+   => [atom-[1,2,3]]
+183. run_jit(len, [atom-[1],nil-[1]], [])
    => [0]
 184. matching(len, red)
    => []
-185. deterministic_shapes([])
-   => []
+185. deterministic_shapes([atom-[1]])
+   => [atom]
 186. solve(member_of, f(x))
    => []
 187. specialise(member_of, [-2,f(x),[]])
-   => []
-188. run_jit(member_of, [cons-[1]], [])
+   => [compound-[1,2]]
+188. run_jit(member_of, [cons-[1,2]], [])
    => []
 189. matching(classify, green)
    => [3]
-190. deterministic_shapes([atom-[3]])
-   => [atom]
+190. deterministic_shapes([atom-[1,2,3]])
+   => []
 191. solve(member_of, green)
    => []
 192. specialise(member_of, [-2,blue])
    => []
-193. run_jit(colour, [atom-[3]], -3)
+193. run_jit(colour, [atom-[1,2,3],cons-[3]], -3)
    => []
 194. matching(colour, [b,b,b,2])
    => []
@@ -393,10 +393,10 @@ detlog-jit: 200 inputs and outputs, from real runs (io/ios.pl has the same as Pr
 196. solve(colour, f(x))
    => []
 197. specialise(member_of, [[1,b,b,1],f(x)])
-   => [cons-[1,2]]
-198. run_jit(classify, [atom-[3]], [])
-   => []
+   => [compound-[1,2],cons-[1,2]]
+198. run_jit(classify, [atom-[1,2,3],compound-[1,2,3,4]], [])
+   => [name]
 199. matching(colour, [])
    => []
-200. deterministic_shapes([cons-[2]])
-   => [cons]
+200. deterministic_shapes([atom-[1],cons-[2]])
+   => [atom,cons]

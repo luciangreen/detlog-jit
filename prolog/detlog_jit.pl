@@ -1,10 +1,12 @@
-% detlog-jit: watch which clauses actually match on real inputs, and build a dispatch table by
-% input shape (nil, cons, an integer, an atom, a compound). Where one clause matches a shape,
-% that call is deterministic, with no choicepoint; shapes never seen fall back to every clause.
+% detlog-jit: watch which input shapes occur on real inputs, and build a dispatch table by input
+% shape (nil, cons, an integer, an atom, a compound) listing the clauses whose heads can match that
+% shape. Where only one clause can, that call is deterministic, with no choicepoint; shapes never seen
+% fall back to every clause. The table is right for every input of a seen shape, not just those seen.
 % A predicate is a list of clauses Head-Body over one input and one output, where Head is the
 % input pattern and Body is Out^Goal. Solutions are all Outs, in clause order.
 %?- solve(len, [a,b], S).                           % S = [2]
 %?- specialise(len, [[], [a], [a,b]], T).          % T = [cons-[2], nil-[1]]: each shape has one clause
+%?- specialise(classify, [5], T), run_jit(classify, T, -3, S).   % T = [int-[1,2,3]], S = [negative]
 %?- run_jit(len, [cons-[2], nil-[1]], [a,b,c], S). % S = [3], using only clause 2
 :- module(detlog_jit, [pred/2, shape/2, solve/3, matching/3, specialise/3, run_jit/4, deterministic_shapes/2]).
 :- use_module(library(lists)).
@@ -31,14 +33,15 @@ solve_with(P, Is, In, S) :- pred(P, Cs), findall(O, ( member(I, Is), nth1(I, Cs,
 % matching(+Pred, +Input, -ClauseNumbers): the clauses that gave at least one solution.
 matching(P, In, Is) :- pred(P, Cs), findall(I, ( nth1(I, Cs, C), copy_term(C, H-(_^G)), H = In, once(G) ), Is0), Is = Is0.
 
-% specialise(+Pred, +ObservedInputs, -Table): for each shape seen, the clauses that matched any input
-% of that shape (sorted Shape-Clauses pairs).
-specialise(P, Ins, T) :- findall(Sh-I, ( member(In, Ins), shape(In, Sh), matching(P, In, Is), member(I, Is) ), Ps0),
-    sort(Ps0, Ps), group(Ps, T0), T = T0.
-group([], []).
-group([K-V|Rest], [K-[V|Vs]|Gs]) :- take(K, Rest, Vs, Rest1), group(Rest1, Gs).
-take(K, [K2-V|R], [V|Vs], R1) :- K == K2, !, take(K, R, Vs, R1).
-take(_, R, [], R).
+% specialise(+Pred, +ObservedInputs, -Table): for each shape seen, the clauses whose head can match an
+% input of that shape (sorted Shape-Clauses pairs). Listing every clause whose head fits the shape, not just
+% those that matched the inputs seen, keeps the table right for every input of a seen shape: a table built
+% from matches alone gave classify(-3) no answer after seeing only 5. Shapes with no clause are left out.
+specialise(P, Ins, T) :- pred(P, Cs), findall(Sh, ( member(In, Ins), shape(In, Sh) ), Shs0), sort(Shs0, Shs),
+    findall(Sh-Is, ( member(Sh, Shs), findall(I, ( nth1(I, Cs, H-_), head_fits(H, Sh) ), Is), Is \== [] ), T0), T = T0.
+% head_fits(+Head, +Shape): a clause head that is a variable fits every shape; otherwise its own shape must match.
+head_fits(H, _) :- var(H), !.
+head_fits(H, Sh) :- shape(H, Sh).
 
 % run_jit(+Pred, +Table, +Input, -Solutions): only the clauses the table lists for this shape;
 % an unseen shape tries every clause.
